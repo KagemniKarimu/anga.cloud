@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"sync"
@@ -13,18 +14,10 @@ var totalRequests int
 var startTime = time.Now()
 
 func main() {
-	http.HandleFunc("/", handler)
+	r := mux.NewRouter()
+	r.HandleFunc("/", home)
+	r.HandleFunc("/debug", debugInfo)
 	log.Fatal(http.ListenAndServe("localhost:8080", nil))
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	increaseCount()
-	if r.URL.Path == "/" {
-		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintf(w, "<h1>HABARI GANI?</h1>")
-	} else {
-		echo(w, r)
-	}
 }
 
 func increaseCount() {
@@ -33,7 +26,14 @@ func increaseCount() {
 	mu.Unlock()
 }
 
-func echo(w http.ResponseWriter, r *http.Request) {
+func home(w http.ResponseWriter, r *http.Request) {
+	increaseCount()
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprintf(w, "<h1>HABARI GANI?</h1>")
+}
+
+func debugInfo(w http.ResponseWriter, r *http.Request) {
+	increaseCount()
 	upTime := time.Since(startTime)
 	fmt.Fprintf(w, "~ANGA.CLOUD~\n")
 	fmt.Fprintf(w, "*************\n")
