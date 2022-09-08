@@ -19,7 +19,12 @@ func main() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	increaseCount()
-	echo(w, r)
+	if r.URL.Path == "/" {
+		w.Header().Set("Content-Type", "text/html")
+		fmt.Fprintf(w, "<h1>HABARI GANI?</h1>")
+	} else {
+		echo(w, r)
+	}
 }
 
 func increaseCount() {
