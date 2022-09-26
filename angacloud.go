@@ -14,10 +14,12 @@ var totalRequests int
 var startTime = time.Now()
 
 func main() {
+	fmt.Print("anga.cloud service is active...")
+	fmt.Print("http://localhost:3000")
 	r := mux.NewRouter()
 	r.HandleFunc("/", home)
 	r.HandleFunc("/debug", debugInfo)
-	log.Fatal(http.ListenAndServe("localhost:8080", r))
+	log.Fatal(http.ListenAndServe("localhost:3000", r))
 }
 
 func increaseCount() {
